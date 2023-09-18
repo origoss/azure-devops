@@ -1,0 +1,30 @@
+---
+services:
+  agent01:
+    image: ${IMAGE}
+    container_name: ${AGENTPREFIX}01
+    hostname: ${AGENTPREFIX}01
+    command:
+      --once
+    environment:
+      AZP_URL: ${AZP_URL}
+      AZP_POOL: ${AZP_POOL}
+      AZP_AGENT_NAME: ${AGENTPREFIX}01
+      AZP_TOKEN: ${AZP_TOKEN}
+      PROXY_URL: ${PROXY_URL}
+    restart: unless-stopped
+    stop_grace_period: 30s
+  agent02:
+    image: ${IMAGE}
+    container_name: ${AGENTPREFIX}02
+    hostname: ${AGENTPREFIX}02
+    command:
+      --once
+    environment:
+      AZP_URL: ${AZP_URL}
+      AZP_POOL: ${AZP_POOL}
+      AZP_AGENT_NAME: ${AGENTPREFIX}02
+      AZP_TOKEN: ${AZP_TOKEN}
+      PROXY_URL: ${PROXY_URL}
+    restart: unless-stopped
+    stop_grace_period: 30s
