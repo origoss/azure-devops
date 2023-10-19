@@ -6,12 +6,18 @@ services:
     hostname: ${AGENTPREFIX}01
     command:
       --once
+    user: ${USER_ID}:${GROUP_ID}
+    security_opt:
+      - seccomp=unconfined
+      - apparmor=unconfined
     environment:
       AZP_URL: ${AZP_URL}
       AZP_POOL: ${AZP_POOL}
       AZP_AGENT_NAME: ${AGENTPREFIX}01
       AZP_TOKEN: ${AZP_TOKEN}
       PROXY_URL: ${PROXY_URL}
+    devices:
+      - /dev/fuse:/dev/fuse:rw
     restart: unless-stopped
     stop_grace_period: 30s
   agent02:
@@ -20,11 +26,17 @@ services:
     hostname: ${AGENTPREFIX}02
     command:
       --once
+    user: ${USER_ID}:${GROUP_ID}
+    security_opt:
+      - seccomp=unconfined
+      - apparmor=unconfined
     environment:
       AZP_URL: ${AZP_URL}
       AZP_POOL: ${AZP_POOL}
       AZP_AGENT_NAME: ${AGENTPREFIX}02
       AZP_TOKEN: ${AZP_TOKEN}
       PROXY_URL: ${PROXY_URL}
+    devices:
+      - /dev/fuse:/dev/fuse:rw
     restart: unless-stopped
     stop_grace_period: 30s
