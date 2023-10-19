@@ -25,7 +25,7 @@ RUN yum update -y && \
   sed -i -e 's|^#mount_program|mount_program|g' -e '/additionalimage.*/a "/var/lib/shared",' /etc/containers/storage.conf && \
   mkdir -p /var/lib/shared/overlay-images /var/lib/shared/overlay-layers && \
   touch /var/lib/shared/overlay-images/images.lock /var/lib/shared/overlay-layers/layers.lock && \
-  (shopt -s nullglob && [ -z "${_BUILD_CACERTDIR}" ] || [ -z "${_BUILD_CACERTDIR}"/* ] || for cacert in ${_BUILD_CACERTDIR}/*; do cp "$cacert" /usr/local/share/ca-certificates/; done) && \
+  (shopt -s nullglob && [ -z "${_BUILD_CACERTDIR}" ] || [ -z "${_BUILD_CACERTDIR}"/* ] || for cacert in ${_BUILD_CACERTDIR}/*; do cp "$cacert"  /etc/pki/ca-trust/source/anchors/; done) && \
   update-ca-trust && \
   mkdir -p /usr/local/bin && \
   mkdir -p /tmp/dl && \
