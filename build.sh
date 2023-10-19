@@ -13,8 +13,17 @@ remotetag="${remotetag:-latest}"
 [ -n "$remoteprefix" ] && remoteprefix="${remoteprefix}/"
 remotename="${remotehost}${remoteprefix}${remoterepo}:${remotetag}"
 
-#cmd=$(command -v buildah)
+cmd=
+[ -z "$cmd" -a -n "$BUILD_PREFER_PODMAN" ] && cmd=$(command -v podman)
+[ -z "$cmd" -a -n "$BUILD_PREFER_BUILDAH" ] && cmd=$(command -v buildah)
+[ -z "$cmd" -a -n "$BUILD_PREFER_DOCKER" ] && cmd=$(command -v docker)
+[ -z "$cmd" ] && cmd=$(command -v podman)
+[ -z "$cmd" ] && cmd=$(command -v buildah)
 [ -z "$cmd" ] && cmd=$(command -v docker)
+if [ -z "$cmd" ]; then
+  echo "Missing container build tools podman/buildah/docker"
+  exit 1
+fi
 
 cd "$dirname" || exit 1
 echo "Building image"
