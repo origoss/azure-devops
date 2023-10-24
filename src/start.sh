@@ -23,7 +23,6 @@ if [ -n "$AZP_WORK" ]; then
 fi
 
 export AGENT_ALLOW_RUNASROOT="1"
-
 cleanup() {
   if [ -e config.sh ]; then
     print_header "Cleanup. Removing Azure Pipelines agent..."
@@ -61,6 +60,8 @@ if [ -n "$PROXY_URL" ]; then
     proxyopts+=(--proxyurl "$PROXY_URL")
   fi
 fi
+
+cleanup
 
 # Let the agent ignore the token env variables
 export VSO_AGENT_IGNORE=AZP_TOKEN,AZP_TOKEN_FILE

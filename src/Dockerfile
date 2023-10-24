@@ -7,6 +7,9 @@ ARG _BUILD_CACERTDIR
 ARG _HELM_VER
 ARG _OC_VER
 
+RUN mkdir -p /root/cacerts
+COPY ./${_BUILD_CACERTDIR}/ /root/cacerts/
+
 RUN yum update -y && \
   yum install -y --exclude container-selinux \
     ca-certificates \
@@ -24,9 +27,9 @@ RUN yum update -y && \
   rm -rf /var/cache /var/log/dnf* /var/log/yum.* && \
   sed -i -e 's|^#mount_program|mount_program|g' -e '/additionalimage.*/a "/var/lib/shared",' /etc/containers/storage.conf && \
   mkdir -p /var/lib/shared/overlay-images /var/lib/shared/overlay-layers && \
-  touch /var/lib/shared/overlay-images/images.lock /var/lib/shared/overlay-layers/layers.lock && \
-  (shopt -s nullglob && [ -z "${_BUILD_CACERTDIR}" ] || [ -z "${_BUILD_CACERTDIR}"/* ] || for cacert in ${_BUILD_CACERTDIR}/*; do cp "$cacert"  /etc/pki/ca-trust/source/anchors/; done) && \
-  update-ca-trust && \
+  touch /var/lib/shared/overlay-images/images.lock /var/lib/shared/overlay-layers/layers.lock
+RUN (shopt -s nullglob && [ -z /root/cacerts/* ] || for cacert in /root/cacerts/*; do echo "Adding CA cert $cacert" && cp "$cacert"  /etc/pki/ca-trust/source/anchors/; done)
+RUN update-ca-trust && \
   mkdir -p /usr/local/bin && \
   mkdir -p /tmp/dl && \
   env https_proxy="${_BUILD_PROXY_URL}" curl -sLo /tmp/dl/helm.tar.gz "https://get.helm.sh/helm-v${_HELM_VER}-linux-amd64.tar.gz" && \

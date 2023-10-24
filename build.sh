@@ -26,6 +26,7 @@ if [ -z "$cmd" ]; then
 fi
 
 cd "$dirname" || exit 1
+mkdir -p "${_BUILD_CACERTDIR}" || exit 1
 echo "Building image"
 "$cmd" build "${build_args[@]}" -t "$buildname" src "$@" || exit 1
 if [ -n "$remotehost" ]; then
