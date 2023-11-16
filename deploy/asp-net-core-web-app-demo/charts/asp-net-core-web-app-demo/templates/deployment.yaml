@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $.Values.appdemo.name }}
+  labels:
+{{- include "appdemo.labels" $ | indent 4 }}
+spec:
+  replicas: {{ $.Values.appdemo.replicaCount }}
+{{- if $.Values.appdemo.updateStrategy }}
+  strategy:
+{{ toYaml $.Values.appdemo.updateStrategy | indent 4 }}
+{{- end }}
+  selector:
+    matchLabels:
+      name: {{ $.Values.appdemo.name }}
+  template:
+    metadata:
+      labels:
+        name: {{ $.Values.appdemo.name }}
+{{- include "appdemo.labels" $ | indent 8 }}
+    spec:
+{{- if $.Values.appdemo.affinity }}
+      affinity:
+{{ toYaml $.Values.appdemo.affinity | indent 8 }}
+{{- end }}
+{{- if $.Values.appdemo.tolerations }}
+      tolerations:
+{{ toYaml $.Values.appdemo.tolerations | indent 8 }}
+{{- end }}
+      terminationGracePeriodSeconds: {{ default 300 $.Values.appdemo.terminationGracePeriodSeconds }}
+      containers:
+      - name: app-demo
+        image: {{ include "appdemo.image" . }}
+        imagePullPolicy: {{ default "IfNotPresent" $.Values.appdemo.image.pullPolicy }}
+{{- if $.Values.appdemo.runAsUser }}
+        securityContext:
+          runAsUser: {{ $.Values.appdemo.runAsUser }}
+{{- if $.Values.appdemo.runAsGroup }}
+          runAsGroup: {{ $.Values.appdemo.runAsGroup }}
+{{- end }}
+{{- end }}
+{{- if $.Values.appdemo.env }}
+        env:
+{{ toYaml $.Values.appdemo.env | indent 10 }}
+{{- end }}
+        ports:
+{{- if $.Values.appdemo.service.http }}
+        - name: http
+          containerPort: {{ $.Values.appdemo.service.http }}
+{{- end }}
+{{- if $.Values.appdemo.service.https }}
+        - name: https
+          containerPort: {{ $.Values.appdemo.service.https }}
+{{- end }}
+{{- if $.Values.appdemo.resources }}
+        resources:
+{{ toYaml $.Values.appdemo.resources | indent 10 }}
+{{- end }}
+{{- if $.Values.appdemo.readinessProbe }}
+        readinessProbe:
+{{ toYaml $.Values.appdemo.readinessProbe | indent 10 }}
+{{- end }}
+{{- if $.Values.appdemo.livenessProbe }}
+        livenessProbe:
+{{ toYaml $.Values.appdemo.livenessProbe | indent 10 }}
+{{- end }}
+{{- if $.Values.appdemo.image.pullSecrets }}
+      imagePullSecrets:
+{{ toYaml $.Values.appdemo.image.pullSecrets | indent 6 }}
+{{- end }}
+{{- if $.Values.appdemo.priorityClass }}
+      priorityClassName: {{ $.Values.appdemo.priorityClass }}
+{{- end }}

@@ -1,0 +1,6 @@
+appdemo:
+  image:
+    pullPolicy: Always
+  env:
+    - name: ENVIRONMENT
+      value: sand

@@ -1,0 +1,6 @@
+apiVersion: v2
+name: asp-net-core-web-app-demo
+description: A Helm chart for AspNetCoreWebAppDemo
+type: application
+version: 0.0.1
+appVersion: "1.0"

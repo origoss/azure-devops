@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "appdemo.service.name" . }}
+  labels:
+{{- include "appdemo.labels" . | indent 4 }}
+spec:
+  type: {{ default "type" $.Values.appdemo.service.type }}
+{{- if $.Values.appdemo.service.clusterIP }}
+  clusterIP: {{ $.Values.appdemo.service.clusterIP }}
+{{- end }}
+{{- if $.Values.appdemo.service.sessionAffinity }}
+  sessionAffinity: {{ $.Values.appdemo.service.sessionAffinity }}
+{{- end }}
+  ports:
+{{- if $.Values.appdemo.service.http }}
+    - name: http
+      port: {{ $.Values.appdemo.service.http }}
+      protocol: TCP
+      targetPort: {{ $.Values.appdemo.service.http }}
+{{- end }}
+{{- if $.Values.appdemo.service.https }}
+    - name: https
+      port: {{ $.Values.appdemo.service.https }}
+      protocol: TCP
+      targetPort: {{ $.Values.appdemo.service.https }}
+{{- end }}
+  selector:
+    name: {{ $.Values.appdemo.name }}

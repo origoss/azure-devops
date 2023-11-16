@@ -1,0 +1,30 @@
+appdemo:
+  name: app-demo
+  replicaCount: 1
+  image:
+    prefix: ""
+    name: aspnetcoredemoapp
+    tag: latest
+    pullPolicy: IfNotPresent
+  labels:
+    app.kubernetes.io/instance: asp-net-core-web-app-demo
+    app.kubernetes.io/name: asp-net-core-web-app-demo
+    app.kubernetes.io/managed-by: Helm
+  env:
+    - name: ENVIRONMENT
+      value: dev
+  resources:
+    requests:
+      cpu: 50m
+      memory: 256Mi
+    limits:
+      cpu: 100m
+      memory: 256Mi
+  service:
+    type: ClusterIP
+    http: 8080
+  route:
+    host: app-demo.example.com
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge
+    wildcardPolicy: None

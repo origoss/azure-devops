@@ -1,0 +1,18 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ include "appdemo.route.name" . }}
+  labels:
+{{- include "appdemo.labels" . | indent 4 }}
+spec:
+  host: {{ $.Values.appdemo.route.host }}
+  port:
+    targetPort: http
+  tls:
+    insecureEdgeTerminationPolicy: {{ $.Values.appdemo.route.insecureEdgeTerminationPolicy }}
+    termination: {{ $.Values.appdemo.route.termination }}
+  to:
+    kind: Service
+    name: {{ include "appdemo.service.name" . }}
+    weight: 100
+  wildcardPolicy: {{ $.Values.appdemo.route.wildcardPolicy }}

@@ -1,0 +1,4 @@
+appdemo:
+  env:
+    - name: ENVIRONMENT
+      value: prod
