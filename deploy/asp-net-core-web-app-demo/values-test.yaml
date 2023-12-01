@@ -1,4 +1,6 @@
 appdemo:
+  route:
+    host: app-demo.ost.mvmh.local
   env:
     - name: ENVIRONMENT
       value: test

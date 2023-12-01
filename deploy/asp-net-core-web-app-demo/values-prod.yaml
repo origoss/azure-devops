@@ -1,4 +1,6 @@
 appdemo:
+  route:
+    host: app-demo.osp.mvmh.local
   env:
     - name: ENVIRONMENT
       value: prod

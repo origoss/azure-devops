@@ -1,6 +1,8 @@
 appdemo:
   image:
     pullPolicy: Always
+  route:
+    host: app-demo.oss.mvmh.local
   env:
     - name: ENVIRONMENT
       value: sand
